@@ -11,8 +11,8 @@ from sqlalchemy import create_engine, func
 from flask import Flask, jsonify
 from flask import render_template
 
-if os.path.exists("templates/trip_summary_fig.png"):
-	os.remove("templates/trip_summary_fig.png")
+if os.path.exists("static/trip_summary_fig.png"):
+	os.remove("static/trip_summary_fig.png")
 
 #################################################
 # Database Setup
@@ -116,12 +116,12 @@ def data_dates(start=None, end=None):
 	return jsonify(temps)
 
 
-@app.route("/api/v1.0/tripsummary/<start>/<end>")
-def calc_temps(start=None, end=None):
+@app.route("/api/v1.0/tripsummary/<start>/<end>", methods=['GET', 'POST'])
+def calc_trip(start=None, end=None):
 	
 	trip_temps = (session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-    	filter(Measurement.date >= start).\
-    	filter(Measurement.date <= end).all())
+    filter(Measurement.date >= start).\
+    filter(Measurement.date <= end).all())
 
 	tmin = trip_temps[0][0]
 	tavg = trip_temps[0][1]
@@ -135,10 +135,11 @@ def calc_temps(start=None, end=None):
 	plt.ylim(0,100)
 	plt.ylabel('Temp (F)')
 	plt.tick_params(axis='x',labelbottom=False, length=0)
-	plt.savefig('templates/trip_summary_fig.png')
+	plt.savefig('static/trip_summary_fig.png')
 
-	return render_template('trip_summary.html', user_image = 'trip_summary_fig.png')
+	return render_template('trip_summary.html', user_image = '../static/trip_summary_fig.png')
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
