@@ -137,7 +137,7 @@ def calc_trip(start=None, end=None):
 	plt.tick_params(axis='x',labelbottom=False, length=0)
 	plt.savefig('static/trip_summary_fig.png')
 
-	return render_template('trip_summary.html', user_image = '../static/trip_summary_fig.png')
+	return render_template('trip_summary.html', user_image = 'static/trip_summary_fig.png')
 
 
 if __name__ == '__main__':
