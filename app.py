@@ -111,13 +111,15 @@ def data_dates(start=None, end=None):
 	return jsonify(temps)
 
 
-#remove figure if exists
-if os.path.exists("static/trip_summary_fig.png"):
-	os.remove("static/trip_summary_fig.png")
+
 
 #create a trip weather summary and figure
 @app.route("/api/v1.0/tripsummary/<start>/<end>", methods=['GET','POST'])
 def calc_trip(start=None, end=None):
+	
+	#remove figure if exists
+	if os.path.exists("static/trip_summary_fig.png"):
+		os.remove("static/trip_summary_fig.png")
 	
 	trip_temps = (session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
     	filter(Measurement.date >= start).\
